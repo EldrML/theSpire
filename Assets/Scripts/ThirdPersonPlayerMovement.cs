@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonMovement : MonoBehaviour
+public class ThirdPersonPlayerMovement : MonoBehaviour
 {
+    [SerializeField] enum movementType {Player, Vehicle}
+
     public CharacterController controller;
     public Transform cam;
 

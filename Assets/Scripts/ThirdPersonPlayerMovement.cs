@@ -8,6 +8,7 @@ public class ThirdPersonPlayerMovement : MonoBehaviour
 
     public CharacterController controller;
     public Transform cam;
+    public bool playerLocked = false;
 
     [SerializeField] private float speed = 6f;
     [SerializeField] private float gravity = 20f;

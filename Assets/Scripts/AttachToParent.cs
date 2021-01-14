@@ -7,40 +7,48 @@ public class AttachToParent : MonoBehaviour
     //public Transform parentTransform;
     public CharacterController childController;
     public ThirdPersonPlayerMovement childMoveScript;
+    public ThirdPersonVehicleMovement parentMoveScript;
 
-    [SerializeField] bool locked;
     [SerializeField] bool inRange;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("c") && !locked && inRange)
+        if (Input.GetKeyDown("c") && !childMoveScript.playerLocked && parentMoveScript.inRange)
         {
-            locked = true;
-
-            childMoveScript.enabled = false;
-            childController.enabled = false;
+            childMoveScript.playerLocked = true;    //set the player's state as locked to the vehicle.
+            childMoveScript.enabled = false;        //Turn off the player's movescript
+            childController.enabled = false;        //Turn off the player's Controller
 
             transform.SetParent(this.transform);
-            childController.transform.position = this.transform.position + 2f * transform.up - 3f * transform.forward;
-            childController.transform.rotation = this.transform.rotation;
+            //childController.transform.position = this.transform.position + (transform.position.y)* transform.up - 3f * transform.forward;
+            //Debug.Log(transform.position);
+            //childController.transform.position = this.transform.position + (this.transform.position.y + (1f-0.25f/2f))* transform.up - 3f * transform.forward;
+            //childController.transform.rotation = this.transform.rotation;
+            
         }
-        else if (Input.GetKeyDown("c") && locked)
+        else if (Input.GetKeyDown("c") && childMoveScript.playerLocked)
         {
-            locked = false;
+            childMoveScript.playerLocked = false;
             transform.SetParent(null);
             childMoveScript.enabled = true;
             childController.enabled = true;
         }
 
-    }
-    void OnTriggerEnter()
-    {
-        inRange = true;
-    }
+        if(childMoveScript.playerLocked)
+        {
+            childController.transform.position = this.transform.position + (parentMoveScript.hoverHeight-0.125f)*transform.up - 3f * transform.forward;
+            childController.transform.rotation = this.transform.rotation;
+        }
 
-    void OnTriggerExit()
-    {
-        inRange = false;
     }
+    // void OnTriggerEnter()
+    // {
+    //     inRange = true;
+    // }
+
+    // void OnTriggerExit()
+    // {
+    //     inRange = false;
+    // }
 }
